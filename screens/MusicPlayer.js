@@ -19,6 +19,7 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import React, {useEffect, useState, useRef} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Slider} from 'react-native';
 import songs from '../model/data';
 
@@ -27,6 +28,16 @@ const {width, height} = Dimensions.get('window');
 const setUpPlayer = async () => {
   try {
     await TrackPlayer.setupPlayer();
+    await TrackPlayer.updateOptions({
+      // Capabilities that will show up on the lock screen
+      capabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.SkipToNext,
+        Capability.SkipToPrevious,
+        Capability.Stop,
+      ],
+    });
     await TrackPlayer.add(songs);
   } catch (e) {
     console.log(e);
@@ -50,6 +61,7 @@ const MusicPlayer = () => {
   const [trackTitle, setTrackTitle] = useState('');
   const [trackArtist, setTrackArtist] = useState('');
   const [trackArtwork, setTrackArtwork] = useState('');
+  const [repeatMode, setRepeatMode] = useState('off');
   const songSlider = useRef(null);
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -101,6 +113,33 @@ const MusicPlayer = () => {
         </View>
       </Animated.View>
     );
+  };
+
+  const repeatIcon = () => {
+    if (repeatMode === 'off') {
+      return 'repeat-off';
+    }
+    if (repeatMode === 'track') {
+      return 'repeat-once';
+    }
+    if (repeatMode === 'repeat') {
+      return 'repeat';
+    }
+  };
+
+  const changeRepeatMode = () => {
+    if (repeatMode === 'off') {
+      TrackPlayer.setRepeatMode(RepeatMode.Track);
+      setRepeatMode('track');
+    }
+    if (repeatMode === 'track') {
+      TrackPlayer.setRepeatMode(RepeatMode.Queue);
+      setRepeatMode('repeat');
+    }
+    if (repeatMode === 'repeat  ') {
+      TrackPlayer.setRepeatMode(RepeatMode.Off);
+      setRepeatMode('off');
+    }
   };
 
   return (
@@ -189,8 +228,12 @@ const MusicPlayer = () => {
           <TouchableOpacity onPress={() => {}}>
             <Ionicons name="heart-outline" size={35} color="#88888888" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
-            <Ionicons name="repeat" size={35} color="#88888888" />
+          <TouchableOpacity onPress={changeRepeatMode}>
+            <MaterialCommunityIcons
+              name={`${repeatIcon()}`}
+              size={35}
+              color={repeatMode !== 'off' ? '#FFD369' : '#88888888'}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <Ionicons name="share-outline" size={35} color="#88888888" />
