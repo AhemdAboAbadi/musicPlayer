@@ -17,10 +17,11 @@ buildscript {
     }
     repositories {
         google()
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.2.1")
+        classPath('com.google.gms:google-services:4.3.3')
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("de.undercouch:gradle-download-task:5.0.1")
         // NOTE: Do not place your application dependencies here; they belong
