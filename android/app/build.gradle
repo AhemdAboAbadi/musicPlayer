@@ -256,6 +256,8 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    implementation project(':react-native-vector-icons')
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
@@ -312,4 +314,7 @@ def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'Ionicons.ttf' ] // Name of the font files you want to copy
+]
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
